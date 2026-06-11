@@ -11,3 +11,10 @@ Fitur utama:
 - Laporan dilengkapi lokasi GPS secara realtime.
 - Bukti foto kerusakan dapat diunggah langsung dari perangkat.
 - Riwayat laporan ditampilkan untuk memudahkan pemantauan secara langsung.
+# Penggunaan
+1. Isi Nama Pelapor.
+2. Isi No. Telepon.
+3. Memberikan Keterangan Kerusakan.
+4. Unggah Foto Bukti Jalan Rusak.
+5. Tekan tombol "Ambil Lokasi GPS" untuk mengambil koordinat GPS.
+6. Tekan tombol "Kirim Laporan".
