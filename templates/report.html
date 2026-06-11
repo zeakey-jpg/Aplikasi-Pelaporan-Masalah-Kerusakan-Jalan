@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="card-title">Lapor Kerusakan Jalan</h1>
+        <p class="card-text">Isi laporan dengan lokasi GPS, foto bukti, serta keterangan kerusakan jalan.</p>
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="nama" class="form-label">Nama Pelapor</label>
+            <input type="text" class="form-control" id="nama" name="nama" required>
+          </div>
+          <div class="mb-3">
+            <label for="telepon" class="form-label">No. Telepon</label>
+            <input type="text" class="form-control" id="telepon" name="telepon" required>
+          </div>
+          <div class="mb-3">
+            <label for="deskripsi" class="form-label">Keterangan Kerusakan</label>
+            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="photo" class="form-label">Foto Bukti Jalan Rusak</label>
+            <input class="form-control" type="file" id="photo" name="photo" accept="image/*" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Lokasi GPS</label>
+            <div class="input-group mb-2">
+              <span class="input-group-text">Latitude</span>
+              <input type="text" class="form-control" id="latitude" name="latitude" readonly required>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">Longitude</span>
+              <input type="text" class="form-control" id="longitude" name="longitude" readonly required>
+            </div>
+            <div class="form-text">Tekan tombol di bawah untuk mengisi koordinat lokasi Anda secara otomatis.</div>
+          </div>
+          <button type="button" class="btn btn-secondary mb-3" onclick="captureLocation()">Ambil Lokasi GPS</button>
+          <button type="submit" class="btn btn-primary">Kirim Laporan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function captureLocation() {
+  if (!navigator.geolocation) {
+    alert('Geolocation tidak didukung oleh browser Anda.');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(function(position) {
+    document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+    document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+  }, function(error) {
+    alert('Gagal mendapatkan lokasi: ' + error.message);
+  });
+}
+</script>
+{% endblock %}

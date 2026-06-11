@@ -1,0 +1,13 @@
+body {
+  background-color: #f8f9fa;
+}
+.card {
+  border: none;
+}
+.footer {
+  margin-top: 40px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}

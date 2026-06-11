@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="card-title">Laporan #{{ report.id }}</h2>
+        <p><strong>Nama Pelapor:</strong> {{ report.nama }}</p>
+        <p><strong>Telepon:</strong> {{ report.telepon }}</p>
+        <p><strong>Keterangan:</strong> {{ report.deskripsi }}</p>
+        <p><strong>Lokasi:</strong> {{ report.latitude }}, {{ report.longitude }}</p>
+        <p><strong>Status:</strong> {{ report.status }}</p>
+        <p><strong>Waktu:</strong> {{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p><strong>Foto Bukti:</strong></p>
+        <img src="{{ url_for('uploaded_file', filename=report.nama_file) }}" alt="Foto laporan" class="img-fluid rounded mb-3">
+        <p><a href="https://www.google.com/maps/search/?api=1&query={{ report.latitude }},{{ report.longitude }}" target="_blank" class="btn btn-outline-primary">Buka di Google Maps</a></p>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title">Ubah Status dan Komentar</h3>
+        <form method="post">
+          <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+              <option value="Diterima" {% if report.status == 'Diterima' %}selected{% endif %}>Diterima</option>
+              <option value="Dalam Proses" {% if report.status == 'Dalam Proses' %}selected{% endif %}>Dalam Proses</option>
+              <option value="Selesai" {% if report.status == 'Selesai' %}selected{% endif %}>Selesai</option>
+              <option value="Ditolak" {% if report.status == 'Ditolak' %}selected{% endif %}>Ditolak</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="komentar_admin" class="form-label">Komentar Admin</label>
+            <textarea class="form-control" id="komentar_admin" name="komentar_admin" rows="4">{{ report.komentar_admin or '' }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+          <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Kembali</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
