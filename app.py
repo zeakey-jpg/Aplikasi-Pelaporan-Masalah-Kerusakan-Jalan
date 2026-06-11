@@ -1,6 +1,7 @@
 import os
 
 from datetime import datetime
+from os import path
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -45,7 +46,7 @@ def allowed_file(filename):
 
 def is_valid_image(path):
    ext = path.rsplit('.', 1)[1].lower()
-    return ext in ALLOWED_EXTENSIONS
+   return ext in ALLOWED_EXTENSIONS
 
 def admin_required():
     return session.get("admin", False)
