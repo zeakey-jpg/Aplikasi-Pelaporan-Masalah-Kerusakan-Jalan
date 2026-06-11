@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h1 class="card-title">Riwayat Laporan</h1>
+        <p class="card-text">Cek status laporan kamu berdasarkan nomor telepon.</p>
+        <form method="post">
+          <div class="input-group">
+            <input type="text" class="form-control" name="telepon" placeholder="Masukkan No. Telepon" value="{{ telepon }}" required>
+            <button class="btn btn-primary" type="submit">Cari</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% if telepon %}
+      {% if reports %}
+        {% for r in reports %}
+        <div class="card shadow-sm mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="mb-0">Laporan #{{ r.id }}</h5>
+              <span class="badge {% if r.status == 'Selesai' %}bg-success{% elif r.status == 'Diproses' %}bg-info{% else %}bg-warning text-dark{% endif %}">{{ r.status }}</span>
+            </div>
+            <p class="mb-1"><strong>Deskripsi:</strong> {{ r.deskripsi }}</p>
+            <p class="mb-1"><strong>Lokasi:</strong> {{ r.latitude }}, {{ r.longitude }}</p>
+            <p class="mb-1"><strong>Tanggal:</strong> {{ r.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+            {% if r.komentar_admin %}
+            <p class="mb-0"><strong>Komentar Admin:</strong> {{ r.komentar_admin }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info">Tidak ada laporan untuk nomor telepon <strong>{{ telepon }}</strong>.</div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

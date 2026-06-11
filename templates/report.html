@@ -29,29 +29,46 @@
               <span class="input-group-text">Latitude</span>
               <input type="text" class="form-control" id="latitude" name="latitude" readonly required>
             </div>
-            <div class="input-group">
+            <div class="input-group mb-2">
               <span class="input-group-text">Longitude</span>
               <input type="text" class="form-control" id="longitude" name="longitude" readonly required>
             </div>
-            <div class="form-text">Tekan tombol di bawah untuk mengisi koordinat lokasi Anda secara otomatis.</div>
+            <div class="form-text mb-2">Tekan tombol di bawah untuk mengisi koordinat lokasi Anda secara otomatis.</div>
+            <button type="button" class="btn btn-secondary mb-3" onclick="captureLocation()">📍 Ambil Lokasi GPS</button>
+            <div id="map" style="height: 300px; display: none; border-radius: 8px;" class="mb-3"></div>
           </div>
-          <button type="button" class="btn btn-secondary mb-3" onclick="captureLocation()">Ambil Lokasi GPS</button>
           <button type="submit" class="btn btn-primary">Kirim Laporan</button>
         </form>
       </div>
     </div>
   </div>
 </div>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+var map, marker;
 function captureLocation() {
   if (!navigator.geolocation) {
     alert('Geolocation tidak didukung oleh browser Anda.');
     return;
   }
   navigator.geolocation.getCurrentPosition(function(position) {
-    document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
-    document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+    var lat = position.coords.latitude.toFixed(6);
+    var lng = position.coords.longitude.toFixed(6);
+    document.getElementById('latitude').value = lat;
+    document.getElementById('longitude').value = lng;
+    var mapDiv = document.getElementById('map');
+    mapDiv.style.display = 'block';
+    if (!map) {
+      map = L.map('map').setView([lat, lng], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+      marker = L.marker([lat, lng]).addTo(map).bindPopup('Lokasi Anda').openPopup();
+    } else {
+      map.setView([lat, lng], 16);
+      marker.setLatLng([lat, lng]);
+    }
   }, function(error) {
     alert('Gagal mendapatkan lokasi: ' + error.message);
   });
