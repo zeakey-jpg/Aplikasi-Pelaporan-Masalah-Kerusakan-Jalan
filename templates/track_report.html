@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-body p-5">
+          <h1 class="card-title text-primary mb-4">
+            <i class="bi bi-search"></i> Lacak Laporan Anda
+          </h1>
+          <p class="card-text text-muted mb-4">Masukkan ID laporan atau nomor telepon Anda untuk melihat status terbaru</p>
+
+          <ul class="nav nav-pills mb-4" id="trackTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="id-tab" data-bs-toggle="pill" data-bs-target="#id-pane" type="button" role="tab">Cari ID Laporan</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="phone-tab" data-bs-toggle="pill" data-bs-target="#phone-pane" type="button" role="tab">Cari Nomor Telepon</button>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="trackTabContent">
+            <!-- Search by ID -->
+            <div class="tab-pane fade show active" id="id-pane" role="tabpanel">
+              <form method="get" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-lg" name="id" placeholder="Masukkan ID laporan..." value="{{ search_id or '' }}">
+                  <button class="btn btn-primary btn-lg" type="submit">
+                    <i class="bi bi-search"></i> Cari
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Search by Phone -->
+            <div class="tab-pane fade" id="phone-pane" role="tabpanel">
+              <form method="get" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-lg" name="phone" placeholder="Masukkan nomor telepon..." value="{{ search_phone or '' }}">
+                  <button class="btn btn-primary btn-lg" type="submit">
+                    <i class="bi bi-search"></i> Cari
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {% if report %}
+          <div class="mt-5">
+            <h4 class="mb-4">Hasil Pencarian</h4>
+            <div class="card border-0 shadow-sm mb-3">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>ID Laporan:</strong> #{{ report.id }}</p>
+                    <p><strong>Nama Pelapor:</strong> {{ report.nama }}</p>
+                    <p><strong>No. Telepon:</strong> {{ report.telepon }}</p>
+                    <p><strong>Tanggal Laporan:</strong> {{ report.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>
+                      <strong>Status Laporan:</strong>
+                      <span class="badge fs-6
+                        {% if report.status == 'Menunggu' %}bg-warning text-dark
+                        {% elif report.status == 'Diproses' %}bg-info text-white
+                        {% elif report.status == 'Selesai' %}bg-success text-white
+                        {% else %}bg-secondary{% endif %}">
+                        {{ report.status }}
+                      </span>
+                    </p>
+                    <p><strong>Terakhir Diperbarui:</strong> {{ report.updated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                  </div>
+                </div>
+                
+                <hr>
+                
+                <h5>Keterangan Kerusakan</h5>
+                <p class="text-muted">{{ report.deskripsi }}</p>
+
+                <h5>Lokasi GPS</h5>
+                <p>
+                  <strong>Latitude:</strong> {{ report.latitude }}<br>
+                  <strong>Longitude:</strong> {{ report.longitude }}
+                </p>
+
+                <h5>Foto Jalan Rusak</h5>
+                <div class="mb-3">
+                  <img src="{{ url_for('uploaded_file', filename=report.nama_file) }}" class="img-fluid rounded shadow-sm" style="max-height: 400px; object-fit: cover;">
+                </div>
+
+                {% if report.foto_perbaikan %}
+                <h5>Foto Hasil Perbaikan</h5>
+                <div class="mb-3">
+                  <img src="{{ url_for('uploaded_file', filename=report.foto_perbaikan) }}" class="img-fluid rounded shadow-sm" style="max-height: 400px; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                {% if report.komentar_admin %}
+                <h5>Komentar dari Admin</h5>
+                <div class="alert alert-info border-0">
+                  <p class="mb-0">{{ report.komentar_admin }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Map -->
+                <h5>Lokasi di Peta</h5>
+                <div id="trackMap" style="height: 300px; border-radius: 8px; margin-top: 10px;"></div>
+              </div>
+            </div>
+          </div>
+          {% elif reports %}
+          <div class="mt-5">
+            <h4 class="mb-4">Laporan Ditemukan ({{ reports|length }})</h4>
+            {% for rpt in reports %}
+            <div class="card border-0 shadow-sm mb-3">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <h5>#{{ rpt.id }} - {{ rpt.nama }}</h5>
+                    <p class="text-muted small mb-1">{{ rpt.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p class="text-muted small">{{ rpt.deskripsi[:80] }}...</p>
+                  </div>
+                  <div class="col-md-4 text-end">
+                    <span class="badge fs-6
+                      {% if rpt.status == 'Menunggu' %}bg-warning text-dark
+                      {% elif rpt.status == 'Diproses' %}bg-info text-white
+                      {% elif rpt.status == 'Selesai' %}bg-success text-white
+                      {% else %}bg-secondary{% endif %}">
+                      {{ rpt.status }}
+                    </span>
+                    <a href="{{ url_for('track_report', id=rpt.id) }}" class="btn btn-sm btn-outline-primary ms-2">
+                      <i class="bi bi-eye"></i> Detail
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% elif search_id or search_phone %}
+          <div class="alert alert-warning mt-4 border-0" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> Laporan tidak ditemukan. Silakan periksa kembali ID atau nomor telepon Anda.
+          </div>
+          {% else %}
+          <div class="alert alert-info mt-4 border-0">
+            <i class="bi bi-info-circle"></i> Gunakan form di atas untuk mencari laporan Anda.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  {% if report %}
+  // Initialize map if we have a report
+  document.addEventListener('DOMContentLoaded', function() {
+    const map = L.map('trackMap').setView([{{ report.latitude }}, {{ report.longitude }}], 15);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map);
+    
+    const marker = L.marker([{{ report.latitude }}, {{ report.longitude }}]).addTo(map);
+    marker.bindPopup(`<strong>#{{ report.id }}</strong><br>{{ report.nama }}`);
+  });
+  {% endif %}
+</script>
+{% endblock %}

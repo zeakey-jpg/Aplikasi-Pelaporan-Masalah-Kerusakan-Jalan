@@ -1,20 +1,50 @@
-# Aplikasi-Pelaporan-Masalah-Kerusakan-Jalan
-Aplikasi pelaporan kerusakan jalan merupakan sebuah sistem berbasis teknologi yang dibuat untuk membantu masyarakat agar dapat menyampaikan informasi yang berhubungan dengan kondisi infrastruktur kerusakan jalan. Penggunaannya dapat mengirimkan laporan kerusakan jalan yang dapat terdeteksi menggunakan fitur GPS, dokumentasi berupa foto.
-# Tugas Projek Pemrograman komputer
-Nama Anggota Kelompok :
-1. Callysta Aurelia (21110125140138)
-2. Iqbal Adityan Firdaus (21110125140143)
-3. Aditya Pramana Putra (21110125140189)
-4. Zeandra Keysa Pradhistya (21110125140194)
+# Aplikasi Pelaporan Masalah Kerusakan Jalan
 
-Fitur utama:
-- Laporan dilengkapi lokasi GPS secara realtime.
-- Bukti foto kerusakan dapat diunggah langsung dari perangkat.
-- Riwayat laporan ditampilkan untuk memudahkan pemantauan secara langsung.
-# Penggunaan
-1. Isi Nama Pelapor.
-2. Isi No. Telepon.
-3. Memberikan Keterangan Kerusakan.
-4. Unggah Foto Bukti Jalan Rusak.
-5. Tekan tombol "Ambil Lokasi GPS" untuk mengambil koordinat GPS.
-6. Tekan tombol "Kirim Laporan".
+Aplikasi ini dibuat untuk membantu masyarakat mengirim laporan kerusakan jalan secara realtime dengan lokasi GPS dan bukti foto. Laporan akan diterima oleh pihak admin dan dapat ditindaklanjuti, termasuk komentar dari pihak pengelola.
+
+## Fitur
+
+- Form laporan dengan lokasi GPS otomatis.
+- Unggah foto bukti kondisi jalan rusak.
+- Admin dapat melihat semua laporan.
+- Admin dapat mengubah status laporan dan menambahkan komentar.
+- Foto hanya menerima format gambar yang valid.
+
+## Teknologi
+
+- Python
+- Flask
+- Flask-SQLAlchemy
+- SQLite
+
+## Cara Menjalankan
+
+1. Buat virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+2. Install dependensi:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Jalankan aplikasi:
+
+```bash
+python app.py
+```
+
+4. Buka browser dan akses:
+
+- Pelapor: `http://127.0.0.1:5000/`
+- Admin: `http://127.0.0.1:5000/admin/login`
+
+## Login Admin
+
+Password default: `admin123`
+
+> Untuk keamanan, ganti password admin dengan variabel lingkungan `ADMIN_PASSWORD` atau ubah di file `app.py`.

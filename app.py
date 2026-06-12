@@ -1,7 +1,6 @@
 import os
-
+import imghdr
 from datetime import datetime
-from os import path
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -45,8 +44,9 @@ def allowed_file(filename):
 
 
 def is_valid_image(path):
-   ext = path.rsplit('.', 1)[1].lower()
-   return ext in ALLOWED_EXTENSIONS
+    image_type = imghdr.what(path)
+    return image_type in ALLOWED_EXTENSIONS
+
 
 def admin_required():
     return session.get("admin", False)
@@ -157,14 +157,3 @@ def admin_report_detail(report_id):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-@app.route("/riwayat", methods=["GET", "POST"])
-def riwayat():
-    reports = []
-    telepon = ""
-    if request.method == "POST":
-        telepon = request.form.get("telepon", "").strip()
-        if telepon:
-            reports = Report.query.filter_by(telepon=telepon).order_by(Report.created_at.desc()).all()
-    return render_template("riwayat.html", reports=reports, telepon=telepon)
