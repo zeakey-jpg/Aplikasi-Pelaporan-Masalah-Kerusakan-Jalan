@@ -28,7 +28,7 @@ class Report(db.Model):
     latitude = db.Column(db.String(64), nullable=False)
     longitude = db.Column(db.String(64), nullable=False)
     nama_file = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(64), nullable=False, default="Diterima")
+    status = db.Column(db.String(64), nullable=False, default="Dalam Peninjauan")
     komentar_admin = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -92,7 +92,7 @@ def report():
             latitude=latitude,
             longitude=longitude,
             nama_file=saved_filename,
-            status="Diterima",
+            status="Dalam Peninjauan",
         )
         db.session.add(report)
         db.session.commit()
