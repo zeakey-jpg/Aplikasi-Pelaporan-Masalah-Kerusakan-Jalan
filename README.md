@@ -1,5 +1,6 @@
 # Aplikasi Pelaporan Masalah Kerusakan Jalan
 
+<<<<<<< Updated upstream
 Aplikasi ini dibuat untuk membantu masyarakat mengirim laporan kerusakan jalan secara realtime dengan lokasi GPS dan bukti foto. Laporan akan diterima oleh pihak admin dan dapat ditindaklanjuti, termasuk komentar dari pihak pengelola.
 
 ## Fitur
@@ -48,3 +49,39 @@ python app.py
 Password default: `admin123`
 
 > Untuk keamanan, ganti password admin dengan variabel lingkungan `ADMIN_PASSWORD` atau ubah di file `app.py`.
+=======
+Fitur utama:
+- Laporan dilengkapi lokasi GPS secara realtime.
+- Bukti foto kerusakan dapat diunggah langsung dari perangkat.
+- Riwayat laporan ditampilkan untuk memudahkan pemantauan secara langsung.
+
+---
+
+## 🎯 Success Metrics
+
+- DAU increase: +30%
+- Report submission rate: +50%
+- Map feature usage: >40% of sessions
+- Admin task time reduction: 80%
+- Average resolution time: <7 days
+- System uptime: >99.5%
+
+---
+
+## 📞 Questions?
+
+Lihat [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md) untuk navigasi lengkap berdasarkan pertanyaan Anda.
+
+---
+
+## 📝 Document Status
+
+✅ **Status**: Ready for Review & Implementation
+- Last Updated: June 2024
+- Version: 1.0
+- Next: Stakeholder approval & project kickoff
+
+---
+
+**Mari wujudkan aplikasi pelaporan yang powerful dan impact-driven! 🌟**
+>>>>>>> Stashed changes
