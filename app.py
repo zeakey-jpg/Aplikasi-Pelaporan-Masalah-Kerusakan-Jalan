@@ -161,5 +161,17 @@ def admin_report_detail(report_id):
     return render_template("admin_detail.html", report=report)
 
 
+
+@app.route("/riwayat", methods=["GET", "POST"])
+def riwayat():
+    reports = []
+    telepon = ""
+    if request.method == "POST":
+        telepon = request.form.get("telepon", "").strip()
+        if telepon:
+            reports = Report.query.filter_by(telepon=telepon).order_by(Report.created_at.desc()).all()
+    return render_template("riwayat.html", reports=reports, telepon=telepon)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
