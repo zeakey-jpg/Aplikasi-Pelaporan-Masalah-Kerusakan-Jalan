@@ -23,6 +23,8 @@ db = SQLAlchemy(app)
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(120), nullable=False)
+    nik = db.Column(db.String(16), nullable=False, default="")
+    alamat = db.Column(db.Text, nullable=False, default="")
     telepon = db.Column(db.String(32), nullable=False)
     deskripsi = db.Column(db.Text, nullable=False)
     latitude = db.Column(db.String(64), nullable=False)
@@ -56,13 +58,15 @@ def admin_required():
 def report():
     if request.method == "POST":
         nama = request.form.get("nama", "").strip()
+        nik = request.form.get("nik", "").strip()
+        alamat = request.form.get("alamat", "").strip()
         telepon = request.form.get("telepon", "").strip()
         deskripsi = request.form.get("deskripsi", "").strip()
         latitude = request.form.get("latitude", "").strip()
         longitude = request.form.get("longitude", "").strip()
         photo = request.files.get("photo")
 
-        if not nama or not telepon or not deskripsi or not latitude or not longitude:
+        if not nama or not nik or not alamat or not telepon or not deskripsi or not latitude or not longitude:
             flash("Semua kolom wajib diisi, termasuk lokasi GPS.", "danger")
             return redirect(url_for("report"))
 
@@ -87,6 +91,8 @@ def report():
 
         report = Report(
             nama=nama,
+            nik=nik,
+            alamat=alamat,
             telepon=telepon,
             deskripsi=deskripsi,
             latitude=latitude,
